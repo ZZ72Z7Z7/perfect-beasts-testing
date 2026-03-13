@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PERFECT BEASTS</title>
+<meta property="og:title" content="PERFECT BEASTS">
+<meta property="og:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25, 2026">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="600">
+<meta property="og:url" content="https://perfectbeasts.live/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PERFECT BEASTS">
+<meta name="twitter:description" content="Modern Bouffon // Northampton Center for the Arts // April 24 &amp; 25, 2026">
+<meta name="twitter:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
+<meta name="theme-color" content="#7a6450">
+<link rel="icon" href="favicon.ico">
+<meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --card-shadow: drop-shadow(0 3px 5px rgba(0,0,0,0.165)) drop-shadow(0 9px 18px rgba(0,0,0,0.113));
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: #7a6450;
+    background-image: url("images/table-bg.jpg");
+    background-size: 800px;
+    background-repeat: repeat;
+  }
+
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1600px;
+    width: 100%;
+    padding: 60px;
+    gap: 24px;
+  }
+
+  .card-link {
+    display: block;
+    width: calc(50% - 12px);
+    aspect-ratio: 1200 / 1665;
+  }
+
+  .card-link:has(img[data-flip-front]) {
+    cursor: pointer;
+  }
+
+  .card-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: var(--card-shadow);
+    border-radius: 3.5%;
+  }
+
+  @media (max-width: 1200px) {
+    body {
+      overflow: hidden;
+      height: 100vh;
+    }
+    .card-grid {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      padding: 3vh 0;
+      gap: 0;
+      height: 100vh;
+      max-width: 100vw;
+      scrollbar-width: none;
+    }
+    .card-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .card-link {
+      flex: 0 0 94vh;
+      width: 100vw;
+      height: 94vh;
+      scroll-snap-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: auto;
+      cursor: default;
+    }
+    .card-link:has(img[data-flip-front]) {
+    cursor: pointer;
+  }
+
+  .card-link img {
+      width: auto;
+      max-width: 95vw;
+      height: auto;
+      max-height: calc(94vh - 20px);
+      object-fit: contain;
+      filter: var(--card-shadow);
+      border-radius: 3.5%;
+    }
+
+  }
+
+  /* Cards with overlay buttons */
+  .card-container {
+    position: relative;
+    width: calc(50% - 12px);
+    aspect-ratio: 1200 / 1665;
+    cursor: pointer;
+  }
+
+  .card-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: var(--card-shadow);
+    border-radius: 3.5%;
+  }
+
+  .card-container .card-link-bg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .tickets-btn {
+    position: absolute;
+    left: 12.8%;
+    width: 75.1%;
+    height: 10.2%;
+    bottom: 7.4%;
+    text-decoration: none;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    z-index: 2;
+    background: transparent;
+    color: transparent;
+    font-size: 0;
+    transition: backdrop-filter 0.2s ease;
+  }
+
+  .tickets-btn:hover {
+    backdrop-filter: brightness(1.12);
+    -webkit-backdrop-filter: brightness(1.12);
+  }
+
+  .btn-workshop-info {
+    bottom: 22.6%;
+    left: 12.6%;
+    width: 73.8%;
+  }
+
+  .btn-workshop-contact {
+    bottom: 7.5%;
+    left: 12.6%;
+    width: 73.8%;
+  }
+
+  @media (max-width: 1200px) {
+    .card-container {
+      flex: 0 0 94vh;
+      width: 100vw;
+      height: 94vh;
+      scroll-snap-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: auto;
+      cursor: default;
+    }
+    .card-container .card-link-bg {
+      position: relative;
+      display: block;
+      width: fit-content;
+      height: fit-content;
+    }
+    .card-container img {
+      width: auto;
+      max-width: 95vw;
+      height: auto;
+      max-height: calc(94vh - 20px);
+      display: block;
+      filter: var(--card-shadow);
+    }
+    .card-container .tickets-btn {
+      position: absolute;
+    }
+
+  }
+
+  @media (min-width: 2001px) {
+    .card-grid {
+      max-width: 2400px;
+    }
+    .card-link {
+      width: calc(33.333% - 16px);
+    }
+    .card-container {
+      width: calc(33.333% - 16px);
+    }
+  }
+
+  /* Landscape grid - triggered by JS .landscape-mode class */
+  body.landscape-mode {
+    overflow: auto;
+    height: auto;
+  }
+  body.landscape-mode .card-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    padding: 40px;
+    gap: 24px;
+    height: auto;
+    max-width: 1600px;
+  }
+  body.landscape-mode .card-link {
+    flex: none;
+    width: calc(50% - 12px);
+    height: auto;
+    scroll-snap-align: none;
+    display: block;
+    aspect-ratio: 1200 / 1665;
+    cursor: pointer;
+  }
+  body.landscape-mode .card-container {
+    flex: none;
+    width: calc(50% - 12px);
+    height: auto;
+    scroll-snap-align: none;
+    display: block;
+    aspect-ratio: 1200 / 1665;
+    cursor: pointer;
+  }
+  body.landscape-mode .card-link picture,
+  body.landscape-mode .card-container picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  body.landscape-mode .card-link img,
+  body.landscape-mode .card-container img,
+  body.landscape-mode picture img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 3.5%;
+  }
+  body.landscape-mode .card-flip-container {
+    width: 100%;
+    height: 100%;
+  }
+  body.landscape-mode .card-flip-front img,
+  body.landscape-mode .card-flip-back img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  body.landscape-mode .card-flip-front picture {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Card flip animation */
+  .card-flip-container {
+    perspective: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card-flip-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-flip-front,
+  .card-flip-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-flip-front picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-flip-back {
+    transform: rotateY(180deg);
+  }
+
+  .card-flip-front img,
+  .card-flip-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: var(--card-shadow);
+    border-radius: 3.5%;
+    display: block;
+  }
+
+  @media (max-width: 1200px) {
+    .card-flip-front img,
+    .card-flip-back img {
+      width: auto;
+      max-width: 95vw;
+      height: auto;
+      max-height: calc(94vh - 20px);
+    }
+    .card-flip-front picture {
+      width: auto;
+      height: auto;
+    }
+  }
+
+  @keyframes card-wobble {
+    0% { transform: rotateY(0deg); }
+    25% { transform: rotateY(4deg); }
+    50% { transform: rotateY(-3deg); }
+    75% { transform: rotateY(2deg); }
+    100% { transform: rotateY(0deg); }
+  }
+
+  .card-flip-inner.wobble {
+    animation: card-wobble 0.6s ease;
+  }
+
+</style>
+</head>
+<body>
+<div class="card-grid">
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
+      <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
+    </picture>
+  </div>
+  <div class="card-container">
+    <div class="card-link-bg">
+      <picture>
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-02_mobile.jpg">
+        <img src="images/card-02.jpg" loading="lazy" alt="Modern Bouffon" width="1200" height="1665">
+      </picture>
+      <a class="tickets-btn" href="https://events.humanitix.com/perfect-beasts-show?h=SiM6BMJovS77kORXZSL4397t2JGi-UL91hsHhQG78Pg&amp;t=1773109967777" target="_blank" rel="noopener">Tickets</a>
+    </div>
+  </div>
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
+      <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
+    </picture>
+  </div>
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-04_mobile_front.jpg">
+      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
+    </picture>
+  </div>
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-05_mobile_front.jpg">
+      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
+    </picture>
+  </div>
+  <div class="card-container">
+    <div class="card-link-bg">
+      <picture>
+        <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-06_mobile.jpg">
+        <img src="images/card-06.jpg" loading="lazy" alt="Workshop" width="1200" height="1665">
+      </picture>
+      <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
+      <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function isMobile() {
+    return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
+  }
+
+  function is916Mode() {
+    return window.innerWidth <= 1200 && (window.innerHeight / window.innerWidth) > (5 / 3);
+  }
+
+  function isDesktop() {
+    return window.innerWidth > 1200;
+  }
+
+  function updateOrientation() {
+    if (window.innerWidth <= 1200 && window.innerWidth > window.innerHeight) {
+      document.body.classList.add('landscape-mode');
+    } else {
+      document.body.classList.remove('landscape-mode');
+    }
+  }
+  updateOrientation();
+  window.addEventListener('resize', updateOrientation);
+  window.addEventListener('orientationchange', function() {
+    setTimeout(updateOrientation, 100);
+  });
+
+  var grid = document.querySelector('.card-grid');
+
+  function setupFlipCards() {
+    var flippableImgs = document.querySelectorAll('img[data-flip-front]');
+
+    flippableImgs.forEach(function(img) {
+      var cardLink = img.closest('.card-link');
+      if (!cardLink) return;
+
+      var picture = img.closest('picture');
+      var container = picture ? picture.parentElement : img.parentElement;
+
+      var flipContainer = document.createElement('div');
+      flipContainer.className = 'card-flip-container';
+
+      var flipInner = document.createElement('div');
+      flipInner.className = 'card-flip-inner';
+
+      var flipFront = document.createElement('div');
+      flipFront.className = 'card-flip-front';
+
+      var flipBack = document.createElement('div');
+      flipBack.className = 'card-flip-back';
+
+      var backSrc;
+      if (is916Mode()) {
+        backSrc = img.dataset.flipBack;
+      } else {
+        backSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
+      }
+
+      var backImg = document.createElement('img');
+      backImg.src = backSrc;
+      backImg.alt = img.alt + ' (back)';
+      backImg.loading = 'lazy';
+
+      if (picture) {
+        flipFront.appendChild(picture);
+      } else {
+        flipFront.appendChild(img);
+      }
+
+      flipBack.appendChild(backImg);
+      flipInner.appendChild(flipFront);
+      flipInner.appendChild(flipBack);
+      flipContainer.appendChild(flipInner);
+      container.appendChild(flipContainer);
+
+      var touchMoved = false;
+      cardLink.addEventListener('touchstart', function() {
+        touchMoved = false;
+      }, { passive: true });
+      cardLink.addEventListener('touchmove', function() {
+        touchMoved = true;
+      }, { passive: true });
+
+      cardLink.addEventListener('click', function(e) {
+        if (touchMoved) return;
+        e.preventDefault();
+        e.stopPropagation();
+        flipInner.classList.toggle('flipped');
+        window.autoFlipCancelled = true;
+      });
+    });
+  }
+
+  setupFlipCards();
+
+  window.addEventListener('load', function() {
+    window.autoFlipCancelled = false;
+    var flipInners = document.querySelectorAll('.card-flip-inner');
+    if (flipInners.length === 0) return;
+
+    if (isDesktop()) {
+      var card4 = flipInners[0];
+      var card5 = flipInners[1];
+
+      setTimeout(function() {
+        if (window.autoFlipCancelled) return;
+        card4.classList.add('flipped');
+      }, 3000);
+
+      setTimeout(function() {
+        if (window.autoFlipCancelled) return;
+        card5.classList.add('flipped');
+      }, 6000);
+
+      setTimeout(function() {
+        if (window.autoFlipCancelled) return;
+        card4.classList.remove('flipped');
+      }, 9000);
+
+      setTimeout(function() {
+        if (window.autoFlipCancelled) return;
+        card5.classList.remove('flipped');
+      }, 12000);
+
+    } else {
+      var triggered = {};
+
+      var flipObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var cardLink = el.closest('.card-link');
+          if (!cardLink) return;
+          var img = cardLink.querySelector('img');
+          var id = img ? img.alt : '';
+          if (triggered[id]) return;
+          triggered[id] = true;
+
+          setTimeout(function() {
+            el.classList.add('wobble');
+            el.addEventListener('animationend', function() {
+              el.classList.remove('wobble');
+            }, { once: true });
+          }, 1000);
+
+          setTimeout(function() {
+            if (!el.classList.contains('flipped')) {
+              el.classList.add('flipped');
+            }
+          }, 3000);
+
+          setTimeout(function() {
+            if (el.classList.contains('flipped')) {
+              el.classList.remove('flipped');
+            }
+          }, 6000);
+        });
+      }, { threshold: 0.3 });
+
+      flipInners.forEach(function(inner) {
+        flipObserver.observe(inner);
+      });
+    }
+  });
+</script>
+</body>
+</html>
