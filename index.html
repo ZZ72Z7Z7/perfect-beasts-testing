@@ -378,12 +378,6 @@
   </div>
   <div class="card-link">
     <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
-      <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
-    </picture>
-  </div>
-  <div class="card-link">
-    <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-04_mobile_front.jpg">
       <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
     </picture>
@@ -392,6 +386,12 @@
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-05_mobile_front.jpg">
       <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
+    </picture>
+  </div>
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
+      <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-container">
@@ -433,6 +433,17 @@
   });
 
   var grid = document.querySelector('.card-grid');
+
+  window.addEventListener('load', function() {
+    if (isMobile()) {
+      setTimeout(function() {
+        grid.scrollTo({ top: 60, behavior: 'smooth' });
+        setTimeout(function() {
+          grid.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 400);
+      }, 800);
+    }
+  });
 
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
@@ -479,6 +490,27 @@
       flipInner.appendChild(flipBack);
       flipContainer.appendChild(flipInner);
       container.appendChild(flipContainer);
+
+      function sizeFlip() {
+        if (!isMobile()) {
+          flipContainer.style.width = '';
+          flipContainer.style.height = '';
+          return;
+        }
+        var frontImg = flipFront.querySelector('img');
+        if (frontImg && frontImg.offsetHeight > 0) {
+          flipContainer.style.width = frontImg.offsetWidth + 'px';
+          flipContainer.style.height = frontImg.offsetHeight + 'px';
+        }
+      }
+
+      var fImg = flipFront.querySelector('img');
+      if (fImg) {
+        fImg.addEventListener('load', sizeFlip);
+        if (fImg.complete) sizeFlip();
+      }
+      backImg.addEventListener('load', sizeFlip);
+      window.addEventListener('resize', sizeFlip);
 
       var touchMoved = false;
       cardLink.addEventListener('touchstart', function() {
@@ -529,7 +561,7 @@
         card5.classList.remove('flipped');
       }, 12000);
 
-    } else {
+    } else if (isMobile()) {
       var triggered = {};
 
       var flipObserver = new IntersectionObserver(function(entries) {
