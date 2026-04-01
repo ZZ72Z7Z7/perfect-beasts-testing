@@ -17,6 +17,7 @@
 <meta name="twitter:image" content="https://perfectbeasts.live/images/PERFECT_BEASTS_1200x600.jpg">
 <meta name="theme-color" content="#7a6450">
 <link rel="icon" href="favicon.ico">
+<script src="https://player.vimeo.com/api/player.js"></script>
 <meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -95,10 +96,9 @@
       cursor: default;
     }
     .card-link:has(img[data-flip-front]) {
-    cursor: pointer;
-  }
-
-  .card-link img {
+      cursor: pointer;
+    }
+    .card-link img {
       width: auto;
       max-width: 95vw;
       height: auto;
@@ -357,11 +357,51 @@
     animation: card-wobble 0.6s ease;
   }
 
+  /* Video card flip */
+  .card-video-flip {
+    cursor: pointer;
+  }
+
+  .card-flip-back .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 3.5%;
+    overflow: hidden;
+  }
+
+  .card-flip-back .video-wrapper iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56.25%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+  }
+
+  @media (max-width: 1200px) {
+    .card-flip-back .video-wrapper {
+      width: auto;
+      max-width: 95vw;
+      height: auto;
+      max-height: calc(94vh - 20px);
+      aspect-ratio: 1200 / 1665;
+    }
+  }
+
+  /* Scroll lock */
+  .scroll-locked {
+    overflow: hidden !important;
+  }
+
 </style>
 </head>
 <body>
 <div class="card-grid">
-  <div class="card-link">
+  <div class="card-link card-video-flip" id="card-video">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
       <img src="images/card-01.jpg" alt="Perfect Beasts" width="1200" height="1665">
@@ -388,6 +428,12 @@
       <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
     </picture>
   </div>
+  <div class="card-link">
+    <picture>
+      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
+      <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
+    </picture>
+  </div>
   <div class="card-container">
     <div class="card-link-bg">
       <picture>
@@ -397,12 +443,6 @@
       <a class="tickets-btn btn-workshop-info" href="https://events.humanitix.com/perfect-beasts-workshop?h=KWJzFsmMzytsI2L-ip8YO90t5slrTo0ZabbFX4dDF9o&amp;t=1773102944347" target="_blank" rel="noopener">Info & Registration</a>
       <a class="tickets-btn btn-workshop-contact" href="mailto:betesparfaites@protonmail.com">Contact</a>
     </div>
-  </div>
-  <div class="card-link">
-    <picture>
-      <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-03_mobile.jpg">
-      <img src="images/card-03.jpg" loading="lazy" alt="Bouffon Info" width="1200" height="1665">
-    </picture>
   </div>
 </div>
 
@@ -434,6 +474,7 @@
 
   var grid = document.querySelector('.card-grid');
 
+  // Bounce hint on mobile
   window.addEventListener('load', function() {
     if (isMobile()) {
       setTimeout(function() {
@@ -445,6 +486,120 @@
     }
   });
 
+  // Video card flip for card 01
+  function setupVideoCard() {
+    var videoCard = document.getElementById('card-video');
+    if (!videoCard) return;
+
+    var picture = videoCard.querySelector('picture');
+    var container = picture ? picture.parentElement : videoCard;
+
+    var flipContainer = document.createElement('div');
+    flipContainer.className = 'card-flip-container';
+
+    var flipInner = document.createElement('div');
+    flipInner.className = 'card-flip-inner';
+
+    var flipFront = document.createElement('div');
+    flipFront.className = 'card-flip-front';
+
+    var flipBack = document.createElement('div');
+    flipBack.className = 'card-flip-back';
+
+    // Video wrapper
+    var videoWrapper = document.createElement('div');
+    videoWrapper.className = 'video-wrapper';
+
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&background=1';
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.title = 'PERFECT BEASTS';
+    iframe.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56.25%;height:100%;border:none;';
+
+    videoWrapper.appendChild(iframe);
+
+    if (picture) {
+      flipFront.appendChild(picture);
+    }
+
+    flipBack.appendChild(videoWrapper);
+    flipInner.appendChild(flipFront);
+    flipInner.appendChild(flipBack);
+    flipContainer.appendChild(flipInner);
+    container.appendChild(flipContainer);
+
+    // sizeFlip for mobile
+    function sizeFlip() {
+      if (!isMobile()) {
+        flipContainer.style.width = '';
+        flipContainer.style.height = '';
+        return;
+      }
+      var frontImg = flipFront.querySelector('img');
+      if (frontImg && frontImg.offsetHeight > 0) {
+        flipContainer.style.width = frontImg.offsetWidth + 'px';
+        flipContainer.style.height = frontImg.offsetHeight + 'px';
+      }
+    }
+
+    var fImg = flipFront.querySelector('img');
+    if (fImg) {
+      fImg.addEventListener('load', sizeFlip);
+      if (fImg.complete) sizeFlip();
+    }
+    window.addEventListener('resize', sizeFlip);
+
+    // Manual flip on tap/click
+    var touchMoved = false;
+    videoCard.addEventListener('touchstart', function() {
+      touchMoved = false;
+    }, { passive: true });
+    videoCard.addEventListener('touchmove', function() {
+      touchMoved = true;
+    }, { passive: true });
+
+    videoCard.addEventListener('click', function(e) {
+      if (touchMoved) return;
+      e.preventDefault();
+      e.stopPropagation();
+      flipInner.classList.toggle('flipped');
+    });
+
+    // Vimeo player control
+    var player = new Vimeo.Player(iframe);
+
+    // Auto-flip sequence
+    window.addEventListener('load', function() {
+      // Lock scroll on mobile
+      if (isMobile()) {
+        grid.classList.add('scroll-locked');
+      }
+
+      // Flip to video at 2 seconds
+      setTimeout(function() {
+        flipInner.classList.add('flipped');
+        player.play();
+      }, 2000);
+
+      // Unlock scroll at 12 seconds (10s after flip)
+      if (isMobile()) {
+        setTimeout(function() {
+          grid.classList.remove('scroll-locked');
+        }, 12000);
+      }
+
+      // Flip back at 47 seconds (2s delay + 45s video)
+      setTimeout(function() {
+        flipInner.classList.remove('flipped');
+        player.pause();
+      }, 47000);
+    });
+  }
+
+  setupVideoCard();
+
+  // Card flip for cards 04 and 05
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -532,14 +687,16 @@
 
   setupFlipCards();
 
+  // Auto-flip for cards 04 and 05
   window.addEventListener('load', function() {
     window.autoFlipCancelled = false;
     var flipInners = document.querySelectorAll('.card-flip-inner');
-    if (flipInners.length === 0) return;
+    // Skip first flipInner (card 01 video) - cards 04/05 are index 1 and 2
+    if (flipInners.length < 3) return;
 
     if (isDesktop()) {
-      var card4 = flipInners[0];
-      var card5 = flipInners[1];
+      var card4 = flipInners[1];
+      var card5 = flipInners[2];
 
       setTimeout(function() {
         if (window.autoFlipCancelled) return;
@@ -596,9 +753,10 @@
         });
       }, { threshold: 0.3 });
 
-      flipInners.forEach(function(inner) {
-        flipObserver.observe(inner);
-      });
+      // Only observe card 04 and 05 flip inners (skip card 01)
+      for (var i = 1; i < flipInners.length; i++) {
+        flipObserver.observe(flipInners[i]);
+      }
     }
   });
 </script>
