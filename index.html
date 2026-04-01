@@ -18,6 +18,7 @@
 <meta name="theme-color" content="#7a6450">
 <link rel="icon" href="favicon.ico">
 <script src="https://player.vimeo.com/api/player.js"></script>
+<script src="https://player.vimeo.com/api/player.js"><\/script>
 <meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -357,7 +358,6 @@
     animation: card-wobble 0.6s ease;
   }
 
-  /* Video card flip */
   .card-video-flip {
     cursor: pointer;
   }
@@ -371,17 +371,6 @@
     overflow: hidden;
   }
 
-  .card-flip-back .video-wrapper iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 56.25%;
-    height: 100%;
-    border: none;
-    border-radius: 0;
-  }
-
   @media (max-width: 1200px) {
     .card-flip-back .video-wrapper {
       width: auto;
@@ -392,7 +381,6 @@
     }
   }
 
-  /* Scroll lock */
   .scroll-locked {
     overflow: hidden !important;
   }
@@ -474,7 +462,6 @@
 
   var grid = document.querySelector('.card-grid');
 
-  // Bounce hint on mobile
   window.addEventListener('load', function() {
     if (isMobile()) {
       setTimeout(function() {
@@ -486,7 +473,6 @@
     }
   });
 
-  // Video card flip for card 01
   function setupVideoCard() {
     var videoCard = document.getElementById('card-video');
     if (!videoCard) return;
@@ -506,12 +492,11 @@
     var flipBack = document.createElement('div');
     flipBack.className = 'card-flip-back';
 
-    // Video wrapper
     var videoWrapper = document.createElement('div');
     videoWrapper.className = 'video-wrapper';
 
     var iframe = document.createElement('iframe');
-    iframe.src = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&background=1';
+    iframe.src = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
     iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.title = 'PERFECT BEASTS';
@@ -529,7 +514,6 @@
     flipContainer.appendChild(flipInner);
     container.appendChild(flipContainer);
 
-    // sizeFlip for mobile
     function sizeFlip() {
       if (!isMobile()) {
         flipContainer.style.width = '';
@@ -550,7 +534,6 @@
     }
     window.addEventListener('resize', sizeFlip);
 
-    // Manual flip on tap/click
     var touchMoved = false;
     videoCard.addEventListener('touchstart', function() {
       touchMoved = false;
@@ -566,30 +549,28 @@
       flipInner.classList.toggle('flipped');
     });
 
-    // Vimeo player control
     var player = new Vimeo.Player(iframe);
 
-    // Auto-flip sequence
     window.addEventListener('load', function() {
-      // Lock scroll on mobile
       if (isMobile()) {
         grid.classList.add('scroll-locked');
       }
 
-      // Flip to video at 2 seconds
       setTimeout(function() {
-        flipInner.classList.add('flipped');
         player.play();
       }, 2000);
 
-      // Unlock scroll at 12 seconds (10s after flip)
+      player.on('playing', function onFirstPlay() {
+        flipInner.classList.add('flipped');
+        player.off('playing', onFirstPlay);
+      });
+
       if (isMobile()) {
         setTimeout(function() {
           grid.classList.remove('scroll-locked');
         }, 12000);
       }
 
-      // Flip back at 47 seconds (2s delay + 45s video)
       setTimeout(function() {
         flipInner.classList.remove('flipped');
         player.pause();
@@ -599,7 +580,6 @@
 
   setupVideoCard();
 
-  // Card flip for cards 04 and 05
   function setupFlipCards() {
     var flippableImgs = document.querySelectorAll('img[data-flip-front]');
 
@@ -687,11 +667,9 @@
 
   setupFlipCards();
 
-  // Auto-flip for cards 04 and 05
   window.addEventListener('load', function() {
     window.autoFlipCancelled = false;
     var flipInners = document.querySelectorAll('.card-flip-inner');
-    // Skip first flipInner (card 01 video) - cards 04/05 are index 1 and 2
     if (flipInners.length < 3) return;
 
     if (isDesktop()) {
@@ -753,7 +731,6 @@
         });
       }, { threshold: 0.3 });
 
-      // Only observe card 04 and 05 flip inners (skip card 01)
       for (var i = 1; i < flipInners.length; i++) {
         flipObserver.observe(flipInners[i]);
       }
