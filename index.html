@@ -533,6 +533,8 @@
     }
     window.addEventListener('resize', sizeFlip);
 
+    var player = new Vimeo.Player(iframe);
+
     var touchMoved = false;
     videoCard.addEventListener('touchstart', function() {
       touchMoved = false;
@@ -546,9 +548,15 @@
       e.preventDefault();
       e.stopPropagation();
       flipInner.classList.toggle('flipped');
+      if (flipInner.classList.contains('flipped')) {
+        player.setCurrentTime(0).then(function() {
+          player.play();
+        });
+      } else {
+        player.pause();
+        player.setCurrentTime(0);
+      }
     });
-
-    var player = new Vimeo.Player(iframe);
 
     window.addEventListener('load', function() {
       if (isMobile()) {
@@ -573,6 +581,7 @@
       setTimeout(function() {
         flipInner.classList.remove('flipped');
         player.pause();
+        player.setCurrentTime(0);
       }, 47000);
     });
   }
