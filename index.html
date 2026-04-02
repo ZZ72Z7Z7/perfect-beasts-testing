@@ -549,9 +549,8 @@
       e.stopPropagation();
       flipInner.classList.toggle('flipped');
       if (flipInner.classList.contains('flipped')) {
-        player.setCurrentTime(0).then(function() {
-          player.play();
-        });
+        player.setCurrentTime(0);
+        player.play();
       } else {
         player.pause();
         player.setCurrentTime(0);
