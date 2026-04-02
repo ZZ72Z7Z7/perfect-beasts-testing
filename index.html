@@ -370,16 +370,6 @@
     overflow: hidden;
   }
 
-  @media (max-width: 1200px) {
-    .card-flip-back .video-wrapper {
-      width: auto;
-      max-width: 95vw;
-      height: auto;
-      max-height: calc(94vh - 20px);
-      aspect-ratio: 1200 / 1665;
-    }
-  }
-
   .scroll-locked {
     overflow: hidden !important;
   }
@@ -499,7 +489,7 @@
     iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.title = 'PERFECT BEASTS';
-    iframe.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56.25%;height:100%;border:none;';
+    iframe.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%);height:100%;aspect-ratio:9/16;max-width:100%;border:none;';
 
     videoWrapper.appendChild(iframe);
 
