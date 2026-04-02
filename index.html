@@ -484,12 +484,20 @@
     var videoWrapper = document.createElement('div');
     videoWrapper.className = 'video-wrapper';
 
+    // Choose video based on screen mode
+    var videoSrc;
+    if (is916Mode()) {
+      videoSrc = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+    } else {
+      videoSrc = 'https://player.vimeo.com/video/1179435831?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+    }
+
     var iframe = document.createElement('iframe');
-    iframe.src = 'https://player.vimeo.com/video/1178912129?h=9f7ede004c&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=0&muted=1&loop=1&title=0&byline=0&portrait=0';
+    iframe.src = videoSrc;
     iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.title = 'PERFECT BEASTS';
-    iframe.style.cssText = 'position:absolute;border:none;';
+    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
 
     videoWrapper.appendChild(iframe);
 
@@ -522,32 +530,6 @@
       if (fImg.complete) sizeFlip();
     }
     window.addEventListener('resize', sizeFlip);
-
-    function sizeIframe() {
-      var w = videoWrapper.offsetWidth;
-      var h = videoWrapper.offsetHeight;
-      if (w === 0 || h === 0) return;
-      var containerRatio = w / h;
-      var videoRatio = 9 / 16;
-      if (containerRatio <= videoRatio) {
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.top = '0';
-        iframe.style.left = '0';
-        iframe.style.transform = 'none';
-      } else {
-        var scaledHeight = (100 / videoRatio * containerRatio);
-        var offset = (scaledHeight - 100) / 2;
-        iframe.style.width = '100%';
-        iframe.style.height = scaledHeight + '%';
-        iframe.style.top = '-' + offset + '%';
-        iframe.style.left = '0';
-        iframe.style.transform = 'none';
-      }
-    }
-
-    sizeIframe();
-    window.addEventListener('resize', sizeIframe);
 
     var player = new Vimeo.Player(iframe);
 
