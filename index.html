@@ -51,10 +51,6 @@
     aspect-ratio: 1200 / 1665;
   }
 
-  .card-link:has(img[data-flip-front]) {
-    cursor: pointer;
-  }
-
   .card-link img {
     width: 100%;
     height: 100%;
@@ -94,9 +90,6 @@
       justify-content: center;
       aspect-ratio: auto;
       cursor: default;
-    }
-    .card-link:has(img[data-flip-front]) {
-      cursor: pointer;
     }
     .card-link img {
       width: auto;
@@ -352,19 +345,18 @@
     }
   }
 
-  @keyframes card-wobble {
-    0% { transform: rotateY(0deg); }
-    25% { transform: rotateY(4deg); }
-    50% { transform: rotateY(-3deg); }
-    75% { transform: rotateY(2deg); }
-    100% { transform: rotateY(0deg); }
-  }
-
-  .card-flip-inner.wobble {
-    animation: card-wobble 0.6s ease;
-  }
 
   .card-video-flip {
+    cursor: pointer;
+  }
+
+  .video-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 10;
     cursor: pointer;
   }
 
@@ -399,13 +391,13 @@
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-04_mobile_front.jpg">
-      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" data-flip-front="images/card-04_mobile_front.jpg" data-flip-back="images/card-04_mobile_back.jpg" data-flip-back-desktop="images/card-04_back.jpg" width="1200" height="1665">
+      <img src="images/card-04_front.jpg" loading="lazy" alt="Minotaur" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-05_mobile_front.jpg">
-      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" data-flip-front="images/card-05_mobile_front.jpg" data-flip-back="images/card-05_mobile_back.jpg" data-flip-back-desktop="images/card-05_back.jpg" width="1200" height="1665">
+      <img src="images/card-05_front.jpg" loading="lazy" alt="Mimi" width="1200" height="1665">
     </picture>
   </div>
   <div class="card-link">
@@ -465,41 +457,6 @@
     }
   });
 
-  // Flag to start cards 4/5 auto-flip after video card returns
-  var cards45Started = false;
-
-  function startCards45AutoFlip() {
-    if (cards45Started) return;
-    if (!isDesktop()) return;
-    cards45Started = true;
-
-    var flipInners = document.querySelectorAll('.card-flip-inner');
-    if (flipInners.length < 3) return;
-
-    var card4 = flipInners[1];
-    var card5 = flipInners[2];
-
-    setTimeout(function() {
-      if (window.autoFlipCancelled) return;
-      card4.classList.add('flipped');
-    }, 3000);
-
-    setTimeout(function() {
-      if (window.autoFlipCancelled) return;
-      card5.classList.add('flipped');
-    }, 6000);
-
-    setTimeout(function() {
-      if (window.autoFlipCancelled) return;
-      card4.classList.remove('flipped');
-    }, 9000);
-
-    setTimeout(function() {
-      if (window.autoFlipCancelled) return;
-      card5.classList.remove('flipped');
-    }, 12000);
-  }
-
   function setupVideoCard() {
     var videoCard = document.getElementById('card-video');
     if (!videoCard) return;
@@ -536,7 +493,12 @@
     iframe.title = 'PERFECT BEASTS';
     iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
 
+    // Click overlay on top of video - covers top 85%, leaves bottom 15% for Vimeo controls
+    var clickOverlay = document.createElement('div');
+    clickOverlay.className = 'video-click-overlay';
+
     videoWrapper.appendChild(iframe);
+    videoWrapper.appendChild(clickOverlay);
 
     if (picture) {
       flipFront.appendChild(picture);
@@ -573,6 +535,19 @@
     videoCard._flipInner = flipInner;
     videoCard._player = player;
 
+    function flipToVideo() {
+      flipInner.classList.add('flipped');
+      player.setCurrentTime(0);
+      player.play();
+    }
+
+    function flipToFront() {
+      flipInner.classList.remove('flipped');
+      player.pause();
+      player.setCurrentTime(0);
+    }
+
+    // Click on front image flips to video
     var touchMoved = false;
     videoCard.addEventListener('touchstart', function() {
       touchMoved = false;
@@ -583,17 +558,20 @@
 
     videoCard.addEventListener('click', function(e) {
       if (touchMoved) return;
+      // Only handle clicks on the front face (not the overlay)
+      if (e.target.closest('.video-click-overlay')) return;
+      if (!flipInner.classList.contains('flipped')) {
+        e.preventDefault();
+        e.stopPropagation();
+        flipToVideo();
+      }
+    });
+
+    // Click on overlay (top 85% of video) flips back to front
+    clickOverlay.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      flipInner.classList.toggle('flipped');
-      if (flipInner.classList.contains('flipped')) {
-        player.setCurrentTime(0);
-        player.play();
-      } else {
-        player.pause();
-        player.setCurrentTime(0);
-        startCards45AutoFlip();
-      }
+      flipToFront();
     });
 
     window.addEventListener('load', function() {
@@ -607,16 +585,14 @@
       });
 
       setTimeout(function() {
-        flipInner.classList.remove('flipped');
-        player.pause();
-        player.setCurrentTime(0);
-        startCards45AutoFlip();
+        flipToFront();
       }, 47000);
     });
   }
 
   setupVideoCard();
 
+  // Click on background flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
@@ -625,144 +601,6 @@
     videoCard._flipInner.classList.remove('flipped');
     videoCard._player.pause();
     videoCard._player.setCurrentTime(0);
-    startCards45AutoFlip();
-  });
-
-  function setupFlipCards() {
-    var flippableImgs = document.querySelectorAll('img[data-flip-front]');
-
-    flippableImgs.forEach(function(img) {
-      var cardLink = img.closest('.card-link');
-      if (!cardLink) return;
-
-      var picture = img.closest('picture');
-      var container = picture ? picture.parentElement : img.parentElement;
-
-      var flipContainer = document.createElement('div');
-      flipContainer.className = 'card-flip-container';
-
-      var flipInner = document.createElement('div');
-      flipInner.className = 'card-flip-inner';
-
-      var flipFront = document.createElement('div');
-      flipFront.className = 'card-flip-front';
-
-      var flipBack = document.createElement('div');
-      flipBack.className = 'card-flip-back';
-
-      var backSrc;
-      if (is916Mode()) {
-        backSrc = img.dataset.flipBack;
-      } else {
-        backSrc = img.dataset.flipBackDesktop || img.dataset.flipBack;
-      }
-
-      var backImg = document.createElement('img');
-      backImg.src = backSrc;
-      backImg.alt = img.alt + ' (back)';
-      backImg.loading = 'lazy';
-
-      if (picture) {
-        flipFront.appendChild(picture);
-      } else {
-        flipFront.appendChild(img);
-      }
-
-      flipBack.appendChild(backImg);
-      flipInner.appendChild(flipFront);
-      flipInner.appendChild(flipBack);
-      flipContainer.appendChild(flipInner);
-      container.appendChild(flipContainer);
-
-      function sizeFlip() {
-        if (!isMobile()) {
-          flipContainer.style.width = '';
-          flipContainer.style.height = '';
-          return;
-        }
-        var frontImg = flipFront.querySelector('img');
-        if (frontImg && frontImg.offsetHeight > 0) {
-          flipContainer.style.width = frontImg.offsetWidth + 'px';
-          flipContainer.style.height = frontImg.offsetHeight + 'px';
-        }
-      }
-
-      var fImg = flipFront.querySelector('img');
-      if (fImg) {
-        fImg.addEventListener('load', sizeFlip);
-        if (fImg.complete) sizeFlip();
-      }
-      backImg.addEventListener('load', sizeFlip);
-      window.addEventListener('resize', sizeFlip);
-
-      var touchMoved = false;
-      cardLink.addEventListener('touchstart', function() {
-        touchMoved = false;
-      }, { passive: true });
-      cardLink.addEventListener('touchmove', function() {
-        touchMoved = true;
-      }, { passive: true });
-
-      cardLink.addEventListener('click', function(e) {
-        if (touchMoved) return;
-        e.preventDefault();
-        e.stopPropagation();
-        flipInner.classList.toggle('flipped');
-        window.autoFlipCancelled = true;
-      });
-    });
-  }
-
-  setupFlipCards();
-
-  // Initialize autoFlipCancelled
-  window.addEventListener('load', function() {
-    window.autoFlipCancelled = false;
-  });
-
-  // Mobile auto-flip for cards 4/5 (independent of video)
-  window.addEventListener('load', function() {
-    if (!isMobile()) return;
-    var flipInners = document.querySelectorAll('.card-flip-inner');
-    if (flipInners.length < 2) return;
-
-    var triggered = {};
-
-    var flipObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var cardLink = el.closest('.card-link');
-        if (!cardLink) return;
-        var img = cardLink.querySelector('img');
-        var id = img ? img.alt : '';
-        if (triggered[id]) return;
-        triggered[id] = true;
-
-        setTimeout(function() {
-          el.classList.add('wobble');
-          el.addEventListener('animationend', function() {
-            el.classList.remove('wobble');
-          }, { once: true });
-        }, 1000);
-
-        setTimeout(function() {
-          if (!el.classList.contains('flipped')) {
-            el.classList.add('flipped');
-          }
-        }, 3000);
-
-        setTimeout(function() {
-          if (el.classList.contains('flipped')) {
-            el.classList.remove('flipped');
-          }
-        }, 6000);
-      });
-    }, { threshold: 0.3 });
-
-    for (var i = 1; i < flipInners.length; i++) {
-      flipObserver.observe(flipInners[i]);
-    }
   });
 </script>
 </body>
