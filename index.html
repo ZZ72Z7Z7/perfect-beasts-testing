@@ -465,6 +465,41 @@
     }
   });
 
+  // Flag to start cards 4/5 auto-flip after video card returns
+  var cards45Started = false;
+
+  function startCards45AutoFlip() {
+    if (cards45Started) return;
+    if (!isDesktop()) return;
+    cards45Started = true;
+
+    var flipInners = document.querySelectorAll('.card-flip-inner');
+    if (flipInners.length < 3) return;
+
+    var card4 = flipInners[1];
+    var card5 = flipInners[2];
+
+    setTimeout(function() {
+      if (window.autoFlipCancelled) return;
+      card4.classList.add('flipped');
+    }, 3000);
+
+    setTimeout(function() {
+      if (window.autoFlipCancelled) return;
+      card5.classList.add('flipped');
+    }, 6000);
+
+    setTimeout(function() {
+      if (window.autoFlipCancelled) return;
+      card4.classList.remove('flipped');
+    }, 9000);
+
+    setTimeout(function() {
+      if (window.autoFlipCancelled) return;
+      card5.classList.remove('flipped');
+    }, 12000);
+  }
+
   function setupVideoCard() {
     var videoCard = document.getElementById('card-video');
     if (!videoCard) return;
@@ -535,7 +570,6 @@
 
     var player = new Vimeo.Player(iframe);
 
-    // Store references for background click handler
     videoCard._flipInner = flipInner;
     videoCard._player = player;
 
@@ -558,6 +592,7 @@
       } else {
         player.pause();
         player.setCurrentTime(0);
+        startCards45AutoFlip();
       }
     });
 
@@ -575,22 +610,22 @@
         flipInner.classList.remove('flipped');
         player.pause();
         player.setCurrentTime(0);
+        startCards45AutoFlip();
       }, 47000);
     });
   }
 
   setupVideoCard();
 
-  // Click on background (wood texture) flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
     if (!videoCard._flipInner.classList.contains('flipped')) return;
-    // If click is inside any card, ignore
     if (e.target.closest('.card-link') || e.target.closest('.card-container')) return;
     videoCard._flipInner.classList.remove('flipped');
     videoCard._player.pause();
     videoCard._player.setCurrentTime(0);
+    startCards45AutoFlip();
   });
 
   function setupFlipCards() {
@@ -680,73 +715,53 @@
 
   setupFlipCards();
 
+  // Initialize autoFlipCancelled
   window.addEventListener('load', function() {
     window.autoFlipCancelled = false;
+  });
+
+  // Mobile auto-flip for cards 4/5 (independent of video)
+  window.addEventListener('load', function() {
+    if (!isMobile()) return;
     var flipInners = document.querySelectorAll('.card-flip-inner');
-    if (flipInners.length < 3) return;
+    if (flipInners.length < 2) return;
 
-    if (isDesktop()) {
-      var card4 = flipInners[1];
-      var card5 = flipInners[2];
+    var triggered = {};
 
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card4.classList.add('flipped');
-      }, 3000);
+    var flipObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var cardLink = el.closest('.card-link');
+        if (!cardLink) return;
+        var img = cardLink.querySelector('img');
+        var id = img ? img.alt : '';
+        if (triggered[id]) return;
+        triggered[id] = true;
 
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card5.classList.add('flipped');
-      }, 6000);
+        setTimeout(function() {
+          el.classList.add('wobble');
+          el.addEventListener('animationend', function() {
+            el.classList.remove('wobble');
+          }, { once: true });
+        }, 1000);
 
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card4.classList.remove('flipped');
-      }, 9000);
+        setTimeout(function() {
+          if (!el.classList.contains('flipped')) {
+            el.classList.add('flipped');
+          }
+        }, 3000);
 
-      setTimeout(function() {
-        if (window.autoFlipCancelled) return;
-        card5.classList.remove('flipped');
-      }, 12000);
+        setTimeout(function() {
+          if (el.classList.contains('flipped')) {
+            el.classList.remove('flipped');
+          }
+        }, 6000);
+      });
+    }, { threshold: 0.3 });
 
-    } else if (isMobile()) {
-      var triggered = {};
-
-      var flipObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-          var el = entry.target;
-          var cardLink = el.closest('.card-link');
-          if (!cardLink) return;
-          var img = cardLink.querySelector('img');
-          var id = img ? img.alt : '';
-          if (triggered[id]) return;
-          triggered[id] = true;
-
-          setTimeout(function() {
-            el.classList.add('wobble');
-            el.addEventListener('animationend', function() {
-              el.classList.remove('wobble');
-            }, { once: true });
-          }, 1000);
-
-          setTimeout(function() {
-            if (!el.classList.contains('flipped')) {
-              el.classList.add('flipped');
-            }
-          }, 3000);
-
-          setTimeout(function() {
-            if (el.classList.contains('flipped')) {
-              el.classList.remove('flipped');
-            }
-          }, 6000);
-        });
-      }, { threshold: 0.3 });
-
-      for (var i = 1; i < flipInners.length; i++) {
-        flipObserver.observe(flipInners[i]);
-      }
+    for (var i = 1; i < flipInners.length; i++) {
+      flipObserver.observe(flipInners[i]);
     }
   });
 </script>
