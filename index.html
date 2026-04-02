@@ -493,7 +493,6 @@
     iframe.title = 'PERFECT BEASTS';
     iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;';
 
-    // Click overlay on top of video - covers top 85%, leaves bottom 15% for Vimeo controls
     var clickOverlay = document.createElement('div');
     clickOverlay.className = 'video-click-overlay';
 
@@ -547,7 +546,8 @@
       player.setCurrentTime(0);
     }
 
-    // Click on front image flips to video
+    videoCard._flipToFront = flipToFront;
+
     var touchMoved = false;
     videoCard.addEventListener('touchstart', function() {
       touchMoved = false;
@@ -558,7 +558,6 @@
 
     videoCard.addEventListener('click', function(e) {
       if (touchMoved) return;
-      // Only handle clicks on the front face (not the overlay)
       if (e.target.closest('.video-click-overlay')) return;
       if (!flipInner.classList.contains('flipped')) {
         e.preventDefault();
@@ -567,7 +566,6 @@
       }
     });
 
-    // Click on overlay (top 85% of video) flips back to front
     clickOverlay.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -592,15 +590,14 @@
 
   setupVideoCard();
 
-  // Click on background flips video card back
+  // Click anywhere outside Vimeo controls flips video card back
   document.addEventListener('click', function(e) {
     var videoCard = document.getElementById('card-video');
     if (!videoCard || !videoCard._flipInner) return;
     if (!videoCard._flipInner.classList.contains('flipped')) return;
-    if (e.target.closest('.card-link') || e.target.closest('.card-container')) return;
-    videoCard._flipInner.classList.remove('flipped');
-    videoCard._player.pause();
-    videoCard._player.setCurrentTime(0);
+    if (e.target.closest('.video-click-overlay')) return;
+    if (e.target.closest('#card-video')) return;
+    videoCard._flipToFront();
   });
 </script>
 </body>
