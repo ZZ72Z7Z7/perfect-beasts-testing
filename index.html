@@ -424,6 +424,7 @@
 </div>
 
 <script>
+
   function isMobile() {
     return window.innerWidth <= 1200 && window.innerHeight > window.innerWidth;
   }
@@ -489,7 +490,7 @@
     iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.title = 'PERFECT BEASTS';
-    iframe.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%);height:100%;aspect-ratio:9/16;max-width:100%;border:none;';
+    iframe.style.cssText = 'position:absolute;border:none;';
 
     videoWrapper.appendChild(iframe);
 
@@ -522,6 +523,32 @@
       if (fImg.complete) sizeFlip();
     }
     window.addEventListener('resize', sizeFlip);
+
+    function sizeIframe() {
+      var w = videoWrapper.offsetWidth;
+      var h = videoWrapper.offsetHeight;
+      if (w === 0 || h === 0) return;
+      var containerRatio = w / h;
+      var videoRatio = 9 / 16;
+      if (containerRatio <= videoRatio) {
+        // Container is narrower than video (9:16 phone) - fit by width
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.transform = 'none';
+      } else {
+        // Container is wider than video (5:7 tablet/desktop) - fill width, crop bottom
+        iframe.style.width = '100%';
+        iframe.style.height = (100 / videoRatio * containerRatio) + '%';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.transform = 'none';
+      }
+    }
+
+    sizeIframe();
+    window.addEventListener('resize', sizeIframe);
 
     var player = new Vimeo.Player(iframe);
 
