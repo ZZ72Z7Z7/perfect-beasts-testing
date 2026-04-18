@@ -310,6 +310,17 @@
       height: auto;
     }
   }
+  .card-scroll-spacer {
+    display: none;
+  }
+  @media (max-width: 1200px) {
+    .card-scroll-spacer {
+      display: block;
+      flex: 0 0 auto;
+      width: 100vw;
+      height: calc(50vh - 8px);
+    }
+  }
   .card-video-flip {
     cursor: pointer;
   }
@@ -351,6 +362,7 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
 </head>
 <body>
 <div class="card-grid">
+  <div class="card-scroll-spacer"></div>
   <div class="card-link card-video-flip" id="card-video">
     <picture>
       <source media="(max-width: 1200px) and (max-aspect-ratio: 3/5)" srcset="images/card-01_mobile.jpg">
@@ -394,6 +406,7 @@ src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
       <a class="tickets-btn btn-workshop-contact" href="mailto:joshua@perfectbeasts.live">Contact</a>
     </div>
   </div>
+  <div class="card-scroll-spacer"></div>
 </div>
 
 <script>
