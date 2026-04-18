@@ -18,32 +18,12 @@
 <meta name="theme-color" content="#7a6450">
 <link rel="icon" href="favicon.ico">
 <script src="https://player.vimeo.com/api/player.js"></script>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '4385190785084363');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-
 <meta name="description" content="PERFECT BEASTS: Modern Bouffon at Northampton Center for the Arts, April 24 &amp; 25, 2026">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
     --card-shadow: drop-shadow(0 3px 5px rgba(0,0,0,0.165)) drop-shadow(0 9px 18px rgba(0,0,0,0.113));
   }
-
   body {
     min-height: 100vh;
     display: flex;
@@ -53,7 +33,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     background-size: 800px;
     background-repeat: repeat;
   }
-
   .card-grid {
     display: flex;
     flex-wrap: wrap;
@@ -62,13 +41,11 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     padding: 60px;
     gap: 24px;
   }
-
   .card-link {
     display: block;
     width: calc(50% - 12px);
     aspect-ratio: 1200 / 1665;
   }
-
   .card-link img {
     width: 100%;
     height: 100%;
@@ -77,7 +54,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     filter: var(--card-shadow);
     border-radius: 3.5%;
   }
-
   @media (max-width: 1200px) {
     body {
       overflow: hidden;
@@ -89,7 +65,7 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
-      padding: 1.5vh 0;
+      padding: 0;
       gap: 0;
       height: 100vh;
       max-width: 100vw;
@@ -99,9 +75,10 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
       display: none;
     }
     .card-link {
-      flex: 0 0 97vh;
+      flex: 0 0 auto;
       width: 100vw;
-      height: 97vh;
+      height: auto;
+      padding: 8px 0;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -113,22 +90,18 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
       object-fit: contain;
       filter: var(--card-shadow);
       border-radius: 3.5%;
     }
-
   }
-
-  /* Cards with overlay buttons */
   .card-container {
     position: relative;
     width: calc(50% - 12px);
     aspect-ratio: 1200 / 1665;
     cursor: pointer;
   }
-
   .card-container img {
     width: 100%;
     height: 100%;
@@ -137,14 +110,12 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     filter: var(--card-shadow);
     border-radius: 3.5%;
   }
-
   .card-container .card-link-bg {
     display: block;
     width: 100%;
     height: 100%;
     position: relative;
   }
-
   .tickets-btn {
     position: absolute;
     left: 12.8%;
@@ -161,29 +132,26 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     font-size: 0;
     transition: backdrop-filter 0.2s ease;
   }
-
   .tickets-btn:hover {
     backdrop-filter: brightness(1.12);
     -webkit-backdrop-filter: brightness(1.12);
   }
-
   .btn-workshop-info {
     bottom: 22.6%;
     left: 12.6%;
     width: 73.8%;
   }
-
   .btn-workshop-contact {
     bottom: 7.5%;
     left: 12.6%;
     width: 73.8%;
   }
-
   @media (max-width: 1200px) {
     .card-container {
-      flex: 0 0 97vh;
+      flex: 0 0 auto;
       width: 100vw;
-      height: 97vh;
+      height: auto;
+      padding: 8px 0;
       scroll-snap-align: center;
       display: flex;
       align-items: center;
@@ -201,16 +169,14 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
       display: block;
       filter: var(--card-shadow);
     }
     .card-container .tickets-btn {
       position: absolute;
     }
-
   }
-
   @media (min-width: 2001px) {
     .card-grid {
       max-width: 2400px;
@@ -222,8 +188,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
       width: calc(33.333% - 16px);
     }
   }
-
-  /* Landscape grid - triggered by JS .landscape-mode class */
   body.landscape-mode {
     overflow: auto;
     height: auto;
@@ -288,8 +252,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     width: 100%;
     height: 100%;
   }
-
-  /* Card flip animation */
   .card-flip-container {
     perspective: 1200px;
     display: flex;
@@ -298,7 +260,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     width: 100%;
     height: 100%;
   }
-
   .card-flip-inner {
     position: relative;
     width: 100%;
@@ -306,11 +267,9 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     transition: transform 0.5s ease;
     transform-style: preserve-3d;
   }
-
   .card-flip-inner.flipped {
     transform: rotateY(180deg);
   }
-
   .card-flip-front,
   .card-flip-back {
     position: absolute;
@@ -321,17 +280,14 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
-
   .card-flip-front picture {
     display: block;
     width: 100%;
     height: 100%;
   }
-
   .card-flip-back {
     transform: rotateY(180deg);
   }
-
   .card-flip-front img,
   .card-flip-back img {
     width: 100%;
@@ -341,26 +297,22 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     border-radius: 3.5%;
     display: block;
   }
-
   @media (max-width: 1200px) {
     .card-flip-front img,
     .card-flip-back img {
       width: auto;
       max-width: 95vw;
       height: auto;
-      max-height: 97vh;
+      max-height: calc(100vh - 24px);
     }
     .card-flip-front picture {
       width: auto;
       height: auto;
     }
   }
-
-
   .card-video-flip {
     cursor: pointer;
   }
-
   .video-click-overlay {
     position: absolute;
     top: 15%;
@@ -370,7 +322,6 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     z-index: 10;
     cursor: pointer;
   }
-
   .card-flip-back .video-wrapper {
     position: relative;
     width: 100%;
@@ -379,8 +330,24 @@ src="https://www.facebook.com/tr?id=4385190785084363&ev=PageView&noscript=1"
     border-radius: 3.5%;
     overflow: hidden;
   }
-
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1392900462867942');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1392900462867942&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <div class="card-grid">
